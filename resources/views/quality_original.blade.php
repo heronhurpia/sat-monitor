@@ -14,19 +14,6 @@
  	</div>
  </div>
  
-
-<!-- Gráfico de sinal -->
-<div class="container"> 
-	<div class="panel panel-default blue lighten-5">
-		<br>
-		<div class="row">
-			<div class="col l12 m12 s12">
- 				<div id="strength-chart" style="width: 100%; height: 500px"></div>
- 			</div>
- 		</div>
- 	</div>
- </div>
- 
  <!-- Checkbox com a lista de transponders -->
  <br><hr/>
  <div class="container">
@@ -90,8 +77,7 @@
 		google.charts.load('current', {'packages':['corechart']});
 
 		// Set a callback to run when the Google Visualization API is loaded.
-		google.charts.setOnLoadCallback(drawQualityChart);
-		google.charts.setOnLoadCallback(drawStrengthChart);
+		google.charts.setOnLoadCallback(drawChart);
 	});
 
 	/** Cria um check box para cada transponder */
@@ -128,26 +114,8 @@
 		return result ;
 	}
 
-	/** Lista todos os valores de qualidade com checkbox = true */
-	function strengthValues(){
-
-		var result = [] ;
-		var strength = <?php print_r($strength[0]->get_transponders_lock_grid) ?>;
-		strength.forEach(function(value,index) {
-			var tmp = [] ;
-			$('.check').each(function(ndx) {
-				if ($(this).is(':checked')) {
-					tmp.push(value[ndx]);
-				}
-			});
-			result.push(tmp);
-		});
-		return result ;
-	}
-
 	$(document).on('change','.check',function() {
-		drawQualityChart();
-		drawStrengthChart();
+		drawChart();
 	});
 
 	/* Monta tabela de cores de acordo com colunas selecionadas */
@@ -166,7 +134,7 @@
 	}
 
 	/* Busca valores máximo e mínimo de qualidade */
-	function getMaxMinQualityValues() {
+	function getMaxMinValues() {
 
 		/* Carrega a variável contendo todos os dados de qualidade */
 		var quality = <?php print_r($quality[0]->get_transponders_lock_grid) ?>;
@@ -201,43 +169,8 @@
    	};
 	}
 
-	/* Busca valores máximo e mínimo de sinal */
-	function getMaxMinStrengthValues() {
-
-		/* Carrega a variável contendo todos os dados de sinal */
-		var strength = <?php print_r($strength[0]->get_transponders_lock_grid) ?>;
-		var max = 0 ;
-		var min = 99999 ;
-
-		/* Busca em cada linha de dados */
-		strength.forEach(function(value,index) {
-			/* Ignora primeira linha */
-			if ( index ) {
-				/** Busca em cada coluna */
-				value.forEach(function(data,ndx){
-					/** Ignora primeira coluna */
-					if ( ndx && ( data != null ) ) {
-						min = data < min ? data : min ;
-						max = data > max ? data : max ;
-					}
-				});
-			//	console.log( value ) ;
-			//	console.log( min + ' -> ' + max ) ;
-			}
-		});
-
-		min = 10*(Math.floor(min/10)) ;
-		max = 10*(Math.ceil(max/10)) ;
-		console.log( min + ' - ' + max ) ;
-
-		return {
-			max: max,
-			min: min
-		};
-	}
-
 	/** Desenha gráfico na tela */
-	function drawQualityChart() {
+	function drawChart() {
 		
 		/** Cria gráficos */
 		var quality = qualityValues();
@@ -246,8 +179,8 @@
 		/* Monta tabela de cores de acordo com colunas selecionadas */
 		var color_data = updateColorData();
 
-		/* Busca valores máximo e mínimo de qualidade */
-		var values = getMaxMinQualityValues();
+		/* Busca valores máximo e mínimo de qualidade N71000846619 V79469480900 */
+		var values = getMaxMinValues();
 
 		/** Monta lista de opções */
 		var options = {
@@ -273,44 +206,5 @@
 		var chart = new google.visualization.LineChart(document.getElementById('quality-chart'));
 		chart.draw(data, options);
 	}
-
-	/** Desenha gráfico na tela */
-	function drawStrengthChart() {
-		
-		/** Cria gráficos */
-		var strength = strengthValues();
-		var data = google.visualization.arrayToDataTable(strength);
-
-		/* Monta tabela de cores de acordo com colunas selecionadas */
-		var color_data = updateColorData();
-
-		/* Busca valores máximo e mínimo de qualidade N71000846619 V79469480900 */
-		var values = getMaxMinStrengthValues();
-
-		/** Monta lista de opções */
-		var options = {
-			title: 'Nível de sinal',
-			curveType: 'function',
-			legend: { 
-				position: 'bottom' 
-			},
-			hAxis: {
-      		gridlines: { 
-					count: 10
-				}
-    		},
-			vAxis: {
-				viewWindow: {
-					'max': values.max,
-					'min': values.min
-				}
-			},
-			colors: color_data 
-		};
-
-		var chart = new google.visualization.LineChart(document.getElementById('strength-chart'));
-		chart.draw(data, options);
-	}
-
 </script>
 @endsection

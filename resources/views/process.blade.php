@@ -31,10 +31,7 @@
 	<div class="section">
 		<div class="card">
 			<div class="card-header">
-				<h5 class="mb-0">
-					<button class="btn btn-link text-decoration-none" data-bs-toggle="collapse">
-					Histórico de alterações
-				</h5>
+				Histórico de alterações
 			</div>
  
 			<div class="card-body">

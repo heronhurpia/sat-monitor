@@ -23,17 +23,27 @@ use App\Http\Controllers\ProcessController;
 // Gianni - Forçado o uso do HTTPS caso a URL definida na config tenha HTTPS
 $scheme = explode(':', config('app.url'))[0];
 if(!empty($scheme)) {
-       URL::forceScheme($scheme);
+	URL::forceScheme($scheme);
 }
 
 // Página de execução do pull
-Route::get('/gitpull', function () {return view('pull');});
+Route::get('/pull', 
+	function () {
+		return view('pull');
+	}
+);
 
-Route::get('/process', [ProcessController::class, 'index'])->name('process');
+Route::get('/', 
+	function () {
+		return view('home');
+	}
+);
 
-Route::get('/', function () {return view('home');});
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+
+
+Route::get('/process', [ProcessController::class, 'index'])->name('process');
 Route::get('/register', function () {})->middleware('auth');
 
 Route::get('/lista',[ListaController:: class,'index'])->name('lista')->middleware('auth');

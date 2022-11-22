@@ -14,7 +14,7 @@ class SignalController extends Controller
 	 */ 
 	public function index()
 	{
-		$strength = DB::select(DB::raw("select * from dvb.get_transponders_lock_grid('quality', '1 month'::interval)"));
+		$strength = DB::select(DB::raw("select * from dvb.get_transponders_lock_grid('strength', '1 month'::interval)"));
 
 		$query = "select date_trunc('hour', datetime) as \"datetime\",frequency,symbol_rate, " .
 					"round(avg(quality))::int as \"quality\", " . 

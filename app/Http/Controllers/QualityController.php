@@ -15,6 +15,7 @@ class QualityController extends Controller
 	public function index()
 	{
 		$quality = DB::select(DB::raw("select * from dvb.get_transponders_lock_grid('quality', '1 month'::interval)"));
+		$strength = DB::select(DB::raw("select * from dvb.get_transponders_lock_grid('strength', '1 month'::interval)"));
 
 		$query = "select date_trunc('hour', datetime) as \"datetime\",frequency,symbol_rate, " .
 					"round(avg(quality))::int as \"quality\", " . 
@@ -29,11 +30,11 @@ class QualityController extends Controller
 					"where datetime >= (select max(date_trunc('hour', datetime)) from dvb.transponders_lock ) " .
 					"group by date_trunc('hour', datetime), frequency, symbol_rate, f.fec_rate, m.modulation_type " . 
 					"order by frequency" ;
-
 		$transponders = DB::select(DB::raw($query));
-		return view('quality', compact('transponders','quality'));
-	}
 
+		return view('quality', compact('transponders','quality','strength'));
+	}
+ 
 	/**
 	 * Show the form for creating a new resource.
 	 *
