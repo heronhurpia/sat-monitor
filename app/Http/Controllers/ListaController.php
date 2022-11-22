@@ -154,7 +154,7 @@ class ListaController extends Controller
 		return redirect('lista')->with(['data' => $data]);
 	}
 							
-	
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
