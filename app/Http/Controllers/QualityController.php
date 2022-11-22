@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Models\Log;
 
 class QualityController extends Controller
 {
@@ -32,7 +33,9 @@ class QualityController extends Controller
 					"order by frequency" ;
 		$transponders = DB::select(DB::raw($query));
 
-		return view('quality', compact('transponders','quality','strength'));
+		$log = Log::latest()->first();
+
+		return view('quality', compact('transponders','quality','strength','log'));
 	}
  
 	/**

@@ -43,11 +43,6 @@
 								<a class="nav-link" href="{{ route('lista') }}">{{ __('Lista') }}</a>
 								{!! (Request::is('lista')?"</strong>":"") !!}
 							</li>
-							<li class="nav-item {{ (Request::is('sinal')?'h5':'') }}">
-							{!! (Request::is('sinal')?"<strong>":"") !!}
-								<a class="nav-link" href="{{ route('sinal') }}">{{ __('Sinal') }}</a>
-								{!! (Request::is('sinal')?'</strong>':'') !!}
-							</li>
 							<li class="nav-item {{ (Request::is('qualidade')?'h5':'') }}"">
 								{!! (Request::is('qualidade')?"<strong>":"") !!}
 								<a class="nav-link" href="{{ route('qualidade') }}">{{ __('Qualidade') }}</a>

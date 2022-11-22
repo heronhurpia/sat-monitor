@@ -2,6 +2,15 @@
 
 @section('content')
 
+@isset ( $log ) 
+	<div class="container"> 
+		<h4>
+      	Última varredura: {{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y')}}
+		</h4>
+	</div>
+@endisset
+
+
 <!-- Gráfico de qualidade -->
 <div class="container"> 
 	<div class="panel panel-default blue lighten-5">
@@ -70,7 +79,6 @@
 		</tbody>
 	</table>
 </div>
-
 
 @endsection
 
