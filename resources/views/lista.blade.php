@@ -13,10 +13,16 @@
 					<li>Canais de TV ( H264 e H265): {{$tv}}</li>
 				@endisset
 				@isset($tv)
-					<li>Canais de TV H265: {{$hevc}}</li>
+					<li>
+						<span class="bg-primary bg-opacity-10">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+						Canais de TV H265: {{$hevc}}
+					</li>
 				@endisset
 				@isset($radio)
-					<li>Canais de rádio: {{$radio}}</li>
+					<li>
+						<span class="bg-success bg-opacity-10">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+						Canais de rádio: {{$radio}}
+					</li>
 				@endisset
 				@isset($logs[0])
 					<li>{{\Carbon\Carbon::parse($logs[0]->created_at)->format('d/m/Y h:i')}} - {{ $logs[0]->description}}</li>
@@ -53,7 +59,7 @@
 			<div id="log_list" class="collapse">
 				<div class="card-body">
 					@foreach($logs as $log)
-						<p>{{ $log->id }}. {{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}} - {{ $log->description}}</p> 
+						<p>{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}} - {{ $log->description}}</p> 
 					@endforeach
 				</div>
 			</div>

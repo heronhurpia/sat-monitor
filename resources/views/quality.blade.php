@@ -5,7 +5,7 @@
 @isset ( $log ) 
 	<div class="container"> 
 		<h4>
-      	Última varredura: {{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y')}}
+      	Última varredura: {{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}
 		</h4>
 	</div>
 @endisset

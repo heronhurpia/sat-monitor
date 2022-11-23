@@ -1,6 +1,6 @@
 <br><hr>
 <div class="container" style="max-width: 90rem;">
-	<div class="row" style="font-size:1.6em;">
+	<div class="row  bg-secondary bg-opacity-10" style="font-size:1.6em; padding-top: 10px; padding-bottom: 10px;">
 		<div class="col-4 {{$transponder->has_logs ? 'text-danger' : 'text-black'}}">
 			@if ( $transponder->count_logs )
 				<span class="badge rounded-pill bg-danger">{{$transponder->count_logs}}</span>
@@ -19,6 +19,7 @@
 	<x-components.log :logs="$transponder->alteracoes"/>
 
 	<!-- Lista de serviços  -->
+	<br>
 	<x-components.service-new :services="$transponder->services" />
 
 </div>
