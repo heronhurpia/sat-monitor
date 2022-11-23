@@ -48,6 +48,11 @@
 								<a class="nav-link" href="{{ route('qualidade') }}">{{ __('Qualidade') }}</a>
 								{!! (Request::is('qualidade')?"</strong>":"") !!}
 							</li>
+							<li class="nav-item {{ (Request::is('tarefas')?'h5':'') }}"">
+								{!! (Request::is('tarefas')?"<strong>":"") !!}
+								<a class="nav-link" href="{{ route('tarefas') }}">{{ __('Tarefas') }}</a>
+								{!! (Request::is('tarefas')?"</strong>":"") !!}
+							</li>
 						@endauth
 						
 						@guest

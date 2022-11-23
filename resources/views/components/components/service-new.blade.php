@@ -10,7 +10,7 @@
 						@endif
 						{{$service->name}}
 					</p>
-					<p class="h5">
+					<p class="h6">
 						{{$service->service_type}}
 					</p>
 				</div>

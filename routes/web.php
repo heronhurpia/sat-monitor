@@ -8,6 +8,7 @@ use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QualityController;
 use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\TodoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,12 @@ Route::get('/',
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
-
 Route::get('/process', [ProcessController::class, 'index'])->name('process');
 Route::get('/register', function () {})->middleware('auth');
+
+Route::get('/tarefas',[TodoController:: class,'index'])->name('tarefas')->middleware('auth');
+Route::post('/tarefas/create',[TodoController:: class,'create']);
+Route::post('/tarefas/update',[TodoController:: class,'update']);
 
 Route::get('/lista',[ListaController:: class,'index'])->name('lista')->middleware('auth');
 Route::post('/lista/find',[ListaController:: class,'find']);
