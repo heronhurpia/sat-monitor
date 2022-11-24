@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
+use App\Models\User;
 use Carbon\Carbon; 
 use Session; 
 
@@ -26,7 +27,8 @@ class TodoController extends Controller
 			->join('users as u','todos.user_id','u.id')
 			->get();
 
-		return view('tarefas',compact('tarefas','mensagens'));
+		$users = User::all();
+		return view('tarefas',compact('tarefas','mensagens','users'));
 	}
 
 	/**

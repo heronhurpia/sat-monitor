@@ -46,20 +46,19 @@
 				<li class="list-group-item {{ ( $t->finished == 0 ) ? 'bg-danger bg-opacity-10' : '' }}">
 					<div class="row">
 						<div class="col-9">
-							@if ( Auth::user()->email == "heron@centurybr.com.br" )
-								<form action="tarefas/update" method="post" class='form-data'>
+							<form action="tarefas/update" method="post" class='form-data'>
+								@can('admin')
 									{{ csrf_field() }}
 									<input type="hidden" class="tarefa_id" name="tarefa_id" value="{{$t->id}}">
 									<button name="finish" class="btn btn-outline-success" type="submit">Finalizar</button>
 									<button name="reinsert" class="btn btn-outline-danger" type="submit">Reinserir</button>
 									<button name="delete" class="btn btn-outline-danger" type="submit">Apagar</button>
-								</form> 
-							@endif
+								@endcan
 
-							{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}} 
-							- {{ ( null!= $t->solicitante ) ? $t->solicitante : "" }}
-							- {{ $t->description}} 
-
+								{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}} 
+								- {{ ( null!= $t->solicitante ) ? $t->solicitante : "" }}
+								- {{ $t->description}} 
+							</form> 
 						</div>
 						@if ( $t->finished == 1 ) 
 							<div class="col-3">
@@ -67,8 +66,6 @@
 							</div>
 						@endif
 					</div>
-					
-					
 				</li>
 			@endforeach
 		</ul>
@@ -77,7 +74,7 @@
 
 <?php
 	//echo '<pre>'; 
-	//print_r($tarefas); 
+	//print_r($users); 
 	//echo '</pre>' ;	
 ?>
 
