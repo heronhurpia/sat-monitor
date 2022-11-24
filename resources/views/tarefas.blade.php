@@ -54,17 +54,16 @@
 									<button name="reinsert" class="btn btn-outline-danger" type="submit">Reinserir</button>
 									<button name="delete" class="btn btn-outline-danger" type="submit">Apagar</button>
 									{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}} - {{ $t->description}} 
-								</form>
+								</form> 
 							@else
-								{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}} - {{ $t->description}} 
+								{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y h:i')}} - {{ $t->description}} 
 							@endif
 						</div>
 						@if ( $t->finished == 1 ) 
-						<div class="col-3">
-							Finalizado em {{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}}
-						</div>
+							<div class="col-3">
+								Finalizado em {{ \Carbon\Carbon::parse($t->updated_at)->format('d/m/Y h:i')}}
+							</div>
 						@endif
-
 					</div>
 					
 					
