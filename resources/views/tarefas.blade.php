@@ -28,6 +28,7 @@
 			<form action="tarefas/create" method="post">
 				@csrf
 				<div class="input-group">
+					<input hidden class="user_id" name="user_id" value="{{Auth::user()->id}}">
 					<input id="description" name="description" type="text" class="form-control" required/>
 					<button class="btn btn-outline-secondary" type="submit">Nova tarefa</button>
 				</div>
@@ -49,7 +50,6 @@
 								<form action="tarefas/update" method="post" class='form-data'>
 									{{ csrf_field() }}
 									<input type="hidden" class="tarefa_id" name="tarefa_id" value="{{$t->id}}">
-									<input type="hidden" class="user_id" name="user_id" value="{{Auth::user()->id}}">
 									<button name="finish" class="btn btn-outline-success" type="submit">Finalizar</button>
 									<button name="reinsert" class="btn btn-outline-danger" type="submit">Reinserir</button>
 									<button name="delete" class="btn btn-outline-danger" type="submit">Apagar</button>
