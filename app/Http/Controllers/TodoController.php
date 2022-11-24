@@ -20,7 +20,12 @@ class TodoController extends Controller
 	{
 		$mensagens = Session::get('mensagens');
 
-		$tarefas = Todo::orderBy('finished','asc')->get();
+		$tarefas = Todo::select('todos.*','u.name as solicitante')
+			->orderBy('finished','asc')
+			->orderBy('updated_at','desc')
+			->join('users as u','todos.user_id','u.id')
+			->get();
+
 		return view('tarefas',compact('tarefas','mensagens'));
 	}
 
@@ -31,10 +36,12 @@ class TodoController extends Controller
 	 */
 	public function create( Request $request)
 	{
+		$user_id = $request->input('user_id');
 		$description = $request->input('description');
 
 		$tarefa = new Todo ;
 		$tarefa->finished = 0 ;
+		$tarefa->user_id = $user_id ;
 		$tarefa->description = $description ;
 		$tarefa->created_at = Carbon::now() ;
 		$tarefa->updated_at = Carbon::now() ;

@@ -53,11 +53,16 @@
 									<button name="finish" class="btn btn-outline-success" type="submit">Finalizar</button>
 									<button name="reinsert" class="btn btn-outline-danger" type="submit">Reinserir</button>
 									<button name="delete" class="btn btn-outline-danger" type="submit">Apagar</button>
-									{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}} - {{ $t->description}} 
+									{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y')}} 
 								</form> 
 							@else
-								{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y h:i')}} - {{ $t->description}} 
+								{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y h:i')}}
 							@endif
+
+							<!-- Exibe solicitante da tarefa -->
+							- {{ ( null!= $t->solicitante ) ? $t->solicitante : "" }}
+							- {{ $t->description}} 
+
 						</div>
 						@if ( $t->finished == 1 ) 
 							<div class="col-3">
@@ -72,6 +77,13 @@
 		</ul>
 	</section>
 @endisset
+
+<?php
+	//echo '<pre>'; 
+	//print_r($tarefas); 
+	//echo '</pre>' ;	
+?>
+
 @endsection
 
 @section('script-commands')
