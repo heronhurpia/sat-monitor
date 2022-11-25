@@ -38,16 +38,6 @@
 					<ul class="navbar-nav ms-auto">
 						<!-- Authentication Links -->
 						@auth 
-
-							<!-- Registrar novos usuários -->
-							@can('manage_users')
-								<li class="nav-item {{ (Request::is('register')?'h5':'') }}"">
-									{!! (Request::is('register')?"<strong>":"") !!}
-									<a class="nav-link" href="{{ route('register') }}">{{ __('Novo usuário') }}</a>
-									{!! (Request::is('register')?"</strong>":"") !!}
-								</li>
-							@endcan 
-
 							<li class="nav-item {{ (Request::is('lista')?'h5':'') }}"">
 								{!! (Request::is('lista')?"<strong>":"") !!}
 								<a class="nav-link" href="{{ route('lista') }}">{{ __('Lista') }}</a>
@@ -84,7 +74,14 @@
 													 document.getElementById('logout-form').submit();">
 										{{ __('Sair') }}
 									</a>
+
 									<a class="dropdown-item" href="{{ route('change-password') }}">Alterar senha</a>
+
+									<!-- Registrar novos usuários -->
+									@can('manage_users')
+										<a class="dropdown-item" href="{{ route('register') }}">{{ __('Novo usuário') }}</a>
+									@endcan 
+
 
 									<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
 										@csrf
