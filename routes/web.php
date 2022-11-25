@@ -42,9 +42,12 @@ Route::get('/',
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('/change-password', [App\Http\Controllers\HomeController::class, 'changePassword'])->name('change-password');
+Route::post('/change-password', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('update-password');
 
 Route::get('/process', [ProcessController::class, 'index'])->name('process');
 Route::get('/register', function () {})->middleware('auth');
+
 
 Route::get('/tarefas',[TodoController:: class,'index'])->name('tarefas')->middleware('auth');
 Route::post('/tarefas/create',[TodoController:: class,'create']);

@@ -47,7 +47,7 @@
 					<div class="row">
 						<div class="col-9">
 							<form action="tarefas/update" method="post" class='form-data'>
-								@can('admin')
+								@can('manage_users')
 									{{ csrf_field() }}
 									<input type="hidden" class="tarefa_id" name="tarefa_id" value="{{$t->id}}">
 									<button name="finish" class="btn btn-outline-success" type="submit">Finalizar</button>
@@ -73,9 +73,9 @@
 @endisset
 
 <?php
-	//echo '<pre>'; 
-	//print_r($users); 
-	//echo '</pre>' ;	
+	echo '<pre>'; 
+	print_r($users); 
+	echo '</pre>' ;	
 ?>
 
 @endsection
