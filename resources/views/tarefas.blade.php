@@ -73,9 +73,9 @@
 @endisset
 
 <?php
-	echo '<pre>'; 
-	print_r($users); 
-	echo '</pre>' ;	
+	//echo '<pre>'; 
+	//print_r($users); 
+	//echo '</pre>' ;	
 ?>
 
 @endsection
