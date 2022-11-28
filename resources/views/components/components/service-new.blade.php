@@ -1,7 +1,7 @@
 @isset($services)
 	<div class="row z-depth-2">		
 		@foreach($services as $service) 
-			<div class="col-4 {{$service->codec == 'HEVC' ? 'bg-primary bg-opacity-10' : ''}}  {{$service->video_pid == '0' ? 'bg-success bg-opacity-10' : ''}} ">
+			<div class="col-4 service-box {{$service->codec == 'HEVC' ? 'bg-primary bg-opacity-10' : ''}}  {{$service->video_pid == '0' ? 'bg-success bg-opacity-10' : ''}} ">
 				<div class="{{$service->has_logs ? 'text-danger' : 'text-black'}}" 
 					style="font-size:1.2em">
 					<p class="h4">
@@ -13,7 +13,7 @@
 					<p class="h6">
 						{{$service->service_type}}
 					</p>
-					<p>{{ ( $service->bouquet_name != "" ) ? $service->bouquet_name : "" }}</p>
+					<p class="{{ $service->bouquet_name }}">{{ ( $service->bouquet_name != "" ) ? $service->bouquet_name : "" }}</p>
 				</div>
 
 				<!-- Lista logs -->

@@ -9,7 +9,7 @@
 	
 		<!-- Resumo do satélite -->
 		<div class="col-5">
-			<h3>Resumo:</h3>
+		<h3>Resumo:</h3>
 			<ul>
 				@isset($tv)
 					<li>Canais de TV ( H264 e H265): {{$tv}}</li>
@@ -26,10 +26,36 @@
 						Canais de rádio: {{$radio}}
 					</li>
 				@endisset
+				@isset($b5)
+					<li>
+						Canais do B5 : {{$b5}}
+					</li>
+				@endisset
+				@isset($b6)
+					<li>
+						Canais do B6 ( HEVC ): {{$b6}}
+					</li>
+				@endisset
 				@isset($logs[0])
 					<li>{{\Carbon\Carbon::parse($logs[0]->created_at)->format('d/m/Y h:i')}} - {{ $logs[0]->description}}</li>
 				@endisset
 			</ul>
+		</div>
+
+		<!-- Lista de redes -->
+		<div class="col-3">
+			<h3>Redes:</h3>
+			@isset ( $networks )
+				<ul>
+				@foreach ( $networks as $net )
+					@if ( $net->bouquet_name != "" )
+						<li id="{{ $net->bouquet_name }}">
+							{{ $net->bouquet_name }} = {{ $net->total }}
+						</li>
+					@endif
+				@endforeach
+				</ul>
+			@endisset
 		</div>
 
 		<!-- Filtro busca por data -->
@@ -44,22 +70,6 @@
 		</div>
 	</div>
 
-	<hr>
-	<div class="row">
-		@isset ( $networks )
-			<ul>
-			@foreach ( $networks as $net )
-				@if ( $net->bouquet_name != "" )
-					<li>
-						{{ $net->bouquet_name }} = {{ $net->total }}
-					</li>
-				@endif
-			@endforeach
-			</ul>
-		@endisset
-	</div>
-
-	
 	<!-- Lista de logs -->
 	<br><hr><br>
 	@isset($logs)
@@ -105,8 +115,54 @@
 </div> 
 
 <?php
-	echo '<pre>'; 
-	print_r($networks); 
-	echo '</pre>' ;	
+//	echo '<pre>'; 
+//	print_r($networks); 
+//	echo '</pre>' ;	
 ?>
+@endsection
+
+@section('script-commands')
+<script type="text/javascript"> 
+
+	const CSS_COLOR_NAMES = ["AntiqueWhite","Chartreuse","Gainsboro","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
+
+	/** Função será executada após a página ser carregada */
+	$(document).ready(function(){
+
+		var ndx = 0 ;
+		var nets = <?php echo $nets ?>;
+		console.log(nets);
+		$.each(nets, function(value,index) {
+			console.log(index['bouquet_name']);
+
+			var cl = index['bouquet_name'] ;
+			var cor = CSS_COLOR_NAMES[ndx++];
+			$('.'+cl).each(function(){
+				console.log('globo');
+				$(this).css({'backgroundColor':cor});
+				$(this).closest('.service-box').css({'backgroundColor':cor});
+			});
+			$('#'+cl).css({'backgroundColor':cor});
+		});
+	});
+
+
+	/** Lista todos os valores de qualidade com checkbox = true */
+/*
+	function qualityValues(){
+		var result = [] ;
+		var quality = <?php //print_r($quality[0]->get_transponders_lock_grid) ?>;
+		quality.forEach(function(value,index) {
+			var tmp = [] ;
+			$('.check').each(function(ndx) {
+				if ($(this).is(':checked')) {
+					tmp.push(value[ndx]);
+				}
+			});
+			result.push(tmp);
+		});
+		return result ;
+	}
+*/
+</script>
 @endsection

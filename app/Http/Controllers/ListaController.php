@@ -132,6 +132,7 @@ class ListaController extends Controller
 		}
 
 		$logs = Log::where('created_at','>',$inicio)
+			->where('table','!=','process')
 			->orderBy('created_at','desc')
 			->get();
 
@@ -142,13 +143,18 @@ class ListaController extends Controller
 		$tv = Service::where('video_pid','>','0')->count();
 		$hevc = Service::where('codec','=','HEVC')->count();
 		$radio = Service::where('video_pid','=','0')->count();
+		$b5 = $tv - $hevc ;
+		$b6 = $tv ;
 
 		$networks = Service::select('bouquet_name')->where("bouquet_name","!=","")->distinct(['bouquet_name'])->get();
 		foreach ( $networks as &$n ) {
 			$n->total = Service::where("bouquet_name",$n->bouquet_name)->count();
+			$b5 = $b5 - $n->total + 1 ;
+			$b6 = $b6 - $n->total + 1 ;
 		}
 
-		return view('lista', compact('transponders','logs','tv','radio','hevc','inicio','networks'));
+		$nets = json_encode($networks);
+		return view('lista', compact('transponders','logs','tv','radio','hevc','inicio','networks','b5','b6','nets'));
 	}
 
 	public function find( Request $request)
