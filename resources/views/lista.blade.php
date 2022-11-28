@@ -3,9 +3,11 @@
 @section('content')
 
 <div class="container">
-
 	<br>
+
 	<div class="row">
+	
+		<!-- Resumo do satélite -->
 		<div class="col-5">
 			<h3>Resumo:</h3>
 			<ul>
@@ -29,6 +31,8 @@
 				@endisset
 			</ul>
 		</div>
+
+		<!-- Filtro busca por data -->
 		<div class="col-3">
 			<form action="lista/find" method="post">
 				@csrf
@@ -39,6 +43,22 @@
 			</form>
 		</div>
 	</div>
+
+	<hr>
+	<div class="row">
+		@isset ( $networks )
+			<ul>
+			@foreach ( $networks as $net )
+				@if ( $net->bouquet_name != "" )
+					<li>
+						{{ $net->bouquet_name }} = {{ $net->total }}
+					</li>
+				@endif
+			@endforeach
+			</ul>
+		@endisset
+	</div>
+
 	
 	<!-- Lista de logs -->
 	<br><hr><br>
@@ -80,13 +100,13 @@
 		@foreach($transponders as $transponder) 
 			<x-components.transponder :transponder="$transponder" />
 			@endforeach
-	@endisset
+	@endisset 
 
 </div> 
 
 <?php
-//	echo '<pre>'; 
-//	print_r($list); 
-//	echo '</pre>' ;	
+	echo '<pre>'; 
+	print_r($networks); 
+	echo '</pre>' ;	
 ?>
 @endsection

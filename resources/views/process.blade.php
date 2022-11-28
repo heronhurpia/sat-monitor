@@ -7,7 +7,7 @@
 	<br>
 	<div class="row">
 		<div class="col-5">
-			<h3>Resumo:</h3>
+			<h3>Resumo:</h3> 
 			<ul>
 				@isset($tv)
 					<li>Canais de TV ( H264 e H265): {{$tv}}</li>
@@ -43,5 +43,16 @@
 	</div>
 	@endisset
 </div>
+
+<?php
+
+//echo '<pre>'; 
+//print_r($collection); 
+//echo '</pre>' ;	
+
+//echo '<pre>'; 
+//print_r($transponders); 
+//echo '</pre>' ;	
+?>
 
 @endsection

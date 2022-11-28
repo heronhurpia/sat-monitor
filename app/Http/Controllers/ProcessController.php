@@ -23,7 +23,7 @@ class ProcessController extends Controller
 	public function index()
 	{
 		/** Atualiza tabelas e calcula alterações */
-		$this->process();
+		$this->process(); 
 
 		$log = new LOG ;
 		$log->table = 'process';
@@ -40,8 +40,14 @@ class ProcessController extends Controller
 		$logs = Log::orderBy('created_at','desc')
 		->limit(100)
 		->get();
-		
-		return view('process', compact('tv','radio','hevc','logs'));
+	
+		$query = "select datetime, lineup from dvb.lineup l order by id_lineup desc limit 1" ;
+		$s = DB::select(DB::raw($query));
+		$transponders = json_decode($s[0]->lineup) ;
+
+//		$collection = Service::distinct->count('bouquet_id');
+
+		return view('process', compact('tv','radio','hevc','logs','transponders'));
 	}
 
 	/**
@@ -170,6 +176,8 @@ class ProcessController extends Controller
 			$channel->transponder_id = $id ;
 			$channel->epg_pid = $service->epg_pid ;
 			$channel->svcid = $service->service_id ;
+			$channel->bouquet_id = $service->bouquet_id ;
+			$channel->bouquet_name = $service->bouquet_name ;
 			$channel->created_at = Carbon::now() ;
 			$channel->updated_at = Carbon::now() ;
 			array_push($logs,'Criado novo serviço: ' . $service->name);
@@ -178,6 +186,16 @@ class ProcessController extends Controller
 		if ( $channel->name != $service->name ) {
 			array_push($logs,"Nome mudou de \"" . $channel->name . "\" para \"" . $service->name ."\"" );
 			$channel->name = $service->name ;
+		}
+
+		if ( $channel->bouquet_name != $service->bouquet_name ) {
+			array_push($logs,"bouquet_name mudou de \"" . $channel->bouquet_name . "\" para \"" . $service->bouquet_name ."\"" );
+			$channel->bouquet_name = $service->bouquet_name ;
+		}
+
+		if ( $channel->bouquet_id != $service->bouquet_id ) {
+			array_push($logs,"bouquet_id mudou de \"" . $channel->bouquet_id . "\" para \"" . $service->bouquet_id ."\"" );
+			$channel->bouquet_id = $service->bouquet_id ;
 		}
 
 		if ( $channel->video_pid != $service->video_pid ) {

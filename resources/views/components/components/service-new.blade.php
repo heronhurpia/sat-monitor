@@ -13,6 +13,7 @@
 					<p class="h6">
 						{{$service->service_type}}
 					</p>
+					<p>{{ ( $service->bouquet_name != "" ) ? $service->bouquet_name : "" }}</p>
 				</div>
 
 				<!-- Lista logs -->

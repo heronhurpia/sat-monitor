@@ -143,7 +143,12 @@ class ListaController extends Controller
 		$hevc = Service::where('codec','=','HEVC')->count();
 		$radio = Service::where('video_pid','=','0')->count();
 
-		return view('lista', compact('transponders','logs','tv','radio','hevc','inicio'));
+		$networks = Service::select('bouquet_name')->where("bouquet_name","!=","")->distinct(['bouquet_name'])->get();
+		foreach ( $networks as &$n ) {
+			$n->total = Service::where("bouquet_name",$n->bouquet_name)->count();
+		}
+
+		return view('lista', compact('transponders','logs','tv','radio','hevc','inicio','networks'));
 	}
 
 	public function find( Request $request)
