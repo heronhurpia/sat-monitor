@@ -9,10 +9,10 @@
 	
 		<!-- Resumo do satélite -->
 		<div class="col-5">
-		<h3>Resumo:</h3>
+			<h3>Resumo:</h3>
 			<ul>
 				@isset($tv)
-					<li>Canais de TV ( H264 e H265): {{$tv}}</li>
+					<li>Canais de TV ( H264 e H265/HEVC): {{$tv}}</li>
 				@endisset
 				@isset($tv)
 					<li>
@@ -37,7 +37,7 @@
 					</li>
 				@endisset
 				@isset($logs[0])
-					<li>{{\Carbon\Carbon::parse($logs[0]->created_at)->format('d/m/Y h:i')}} - {{ $logs[0]->description}}</li>
+					<li class="bg-danger bg-opacity-10">Última alteração: {{\Carbon\Carbon::parse($logs[0]->created_at)->format('d/m/Y h:i')}}</li>
 				@endisset
 			</ul>
 		</div>
@@ -71,8 +71,7 @@
 	</div>
 
 	<!-- Lista de logs -->
-	<br><hr><br>
-	@isset($logs)
+	@isset($logs[0])
 	<div class="section">
 		<div class="card">
 			<div class="card-header">
@@ -146,23 +145,5 @@
 		});
 	});
 
-
-	/** Lista todos os valores de qualidade com checkbox = true */
-/*
-	function qualityValues(){
-		var result = [] ;
-		var quality = <?php //print_r($quality[0]->get_transponders_lock_grid) ?>;
-		quality.forEach(function(value,index) {
-			var tmp = [] ;
-			$('.check').each(function(ndx) {
-				if ($(this).is(':checked')) {
-					tmp.push(value[ndx]);
-				}
-			});
-			result.push(tmp);
-		});
-		return result ;
-	}
-*/
 </script>
 @endsection

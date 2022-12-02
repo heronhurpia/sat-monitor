@@ -32,7 +32,7 @@ class ListaController extends Controller
 			$inicio = $data ;	
 		}
 		else {
-			$inicio = now()->subDays(1);
+			$inicio = now()->subDays(5);
 		}
 
 
@@ -140,7 +140,7 @@ class ListaController extends Controller
 		// $list = DB::select(DB::raw($query));
 	
 		// Totalizações para relatórios
-		$tv = Service::where('video_pid','>','0')->count();
+		$tv = Service::where('video_pid','!=','0')->count();
 		$hevc = Service::where('codec','=','HEVC')->count();
 		$radio = Service::where('video_pid','=','0')->count();
 		$b5 = $tv - $hevc ;
@@ -148,8 +148,16 @@ class ListaController extends Controller
 
 		$networks = Service::select('bouquet_name')->where("bouquet_name","!=","")->distinct(['bouquet_name'])->get();
 		foreach ( $networks as &$n ) {
-			$n->total = Service::where("bouquet_name",$n->bouquet_name)->count();
+			$n->total = Service::where("bouquet_name",$n->bouquet_name)
+										->where('video_pid','!=','0')
+										->where('codec','!=','HEVC')
+										->count();
 			$b5 = $b5 - $n->total + 1 ;
+		}
+		foreach ( $networks as &$n ) {
+			$n->total = Service::where("bouquet_name",$n->bouquet_name)
+										->where('video_pid','!=','0')
+										->count();
 			$b6 = $b6 - $n->total + 1 ;
 		}
 
