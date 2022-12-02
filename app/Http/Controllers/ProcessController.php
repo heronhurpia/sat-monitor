@@ -194,7 +194,8 @@ class ProcessController extends Controller
 		}
 
 		if ( $channel->bouquet_id != $service->bouquet_id ) {
-			array_push($logs,"bouquet_id mudou de \"" . $channel->bouquet_id . "\" para \"" . $service->bouquet_id ."\"" );
+			// Não registrar pois não é uma informação relevante para o SAC
+			// array_push($logs,"bouquet_id mudou de \"" . $channel->bouquet_id . "\" para \"" . $service->bouquet_id ."\"" );
 			$channel->bouquet_id = $service->bouquet_id ;
 		}
 

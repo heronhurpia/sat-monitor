@@ -32,7 +32,7 @@ class ListaController extends Controller
 			$inicio = $data ;	
 		}
 		else {
-			$inicio = now()->subDays(5);
+			$inicio = now()->subDays(2);
 		}
 
 
