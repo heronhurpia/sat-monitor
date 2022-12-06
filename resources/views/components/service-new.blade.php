@@ -27,9 +27,6 @@
 							Vídeo: {{ $service->video_pid }} - PCR: {{ $service->pcr_pid }}
 						</li>
 						<li>
-							service_type_id: {{ $service->service_type_id }}
-						</li>
-						<li>
 							viewer_channel: {{ $service->viewer_channel }}
 						</li>
 					</ul>

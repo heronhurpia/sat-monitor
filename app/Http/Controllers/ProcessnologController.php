@@ -105,32 +105,23 @@ class ProcessnologController extends Controller
 		$channel = Service::where('transponder_id','=',$id)->where('svcid','=',$service->service_id)->first();
 		if ( !$channel ) {
 			$channel = new Service ;
-			$channel->name = $service->name ;
-			$channel->service_type = $service->service_type ;
-			$channel->codec = $service->video_codec ;
-			$channel->video_pid = $service->video_pid ;
-			$channel->pcr_pid = $service->pcr_pid ;
-			$channel->transponder_id = $id ;
-			$channel->epg_pid = $service->epg_pid ;
-			$channel->svcid = $service->service_id ;
-			$channel->bouquet_id = $service->bouquet_id ;
-			$channel->bouquet_name = $service->bouquet_name ;
 			$channel->created_at = Carbon::now() ;
-			$channel->updated_at = Carbon::now() ;
-			$channel->save();
 		}
-		else {
-			$channel->name = $service->name ;
-			$channel->bouquet_name = $service->bouquet_name ;
-			$channel->bouquet_id = $service->bouquet_id ;
-			$channel->video_pid = $service->video_pid ;
-			$channel->pcr_pid = $service->pcr_pid ;
-			$channel->epg_pid = $service->epg_pid ;
-			$channel->codec = $service->video_codec ;
-			$channel->service_type = $service->service_type ;
-			$channel->updated_at = Carbon::now() ;
-			$channel->save();
-		}
+
+		$channel->updated_at = Carbon::now() ;
+		$channel->name = $service->name ;
+		$channel->service_type = $service->service_type ;
+		$channel->codec = $service->video_codec ;
+		$channel->video_pid = $service->video_pid ;
+		$channel->pcr_pid = $service->pcr_pid ;
+		$channel->transponder_id = $id ;
+		$channel->epg_pid = $service->epg_pid ;
+		$channel->svcid = $service->service_id ;
+		$channel->bouquet_id = $service->bouquet_id ;
+		$channel->bouquet_name = $service->bouquet_name ;
+		$channel->viewer_channel = $service->viewer_channel ;
+		$channel->service_type_id = $service->service_type_id ;
+		$channel->save();
 
 		/* Varre cada um dos serviços */
 		foreach($service->audio_pids as $audio){
@@ -138,26 +129,20 @@ class ProcessnologController extends Controller
 		}
 	}
 
-
 	public function updateAudio($id,$audio){
 
 		$audio_channel = Audio::where('service_id','=',$id)->where('pid','=',$audio->pid)->first();
 		if ( !$audio_channel ) {
 			$audio_channel = new Audio ;
-			$audio_channel->pid = $audio->pid ;
-			$audio_channel->language = $audio->lang ;
-			$audio_channel->service_id = $id ;
-			$audio_channel->audio_type = $audio->codec ;
 			$audio_channel->created_at = Carbon::now() ;
-			$audio_channel->updated_at = Carbon::now() ;
-			$audio_channel->save();
 		}
-		else {
-			$audio_channel->audio_type = $audio->codec ;
-			$audio_channel->language = $audio->lang ;
-			$audio_channel->updated_at = Carbon::now() ;
-			$audio_channel->save();
-		}
+	
+		$audio_channel->updated_at = Carbon::now() ;
+		$audio_channel->pid = $audio->pid ;
+		$audio_channel->language = $audio->lang ;
+		$audio_channel->service_id = $id ;
+		$audio_channel->audio_type = $audio->codec ;
+		$audio_channel->save();
 	}
 }
 

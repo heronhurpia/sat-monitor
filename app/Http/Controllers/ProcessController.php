@@ -178,6 +178,8 @@ class ProcessController extends Controller
 			$channel->svcid = $service->service_id ;
 			$channel->bouquet_id = $service->bouquet_id ;
 			$channel->bouquet_name = $service->bouquet_name ;
+			$channel->viewer_channel = $service->viewer_channel ;
+			$channel->service_type_id = $service->service_type_id ;
 			$channel->created_at = Carbon::now() ;
 			$channel->updated_at = Carbon::now() ;
 			array_push($logs,'Criado novo serviço: ' . $service->name);
@@ -186,6 +188,17 @@ class ProcessController extends Controller
 		if ( $channel->name != $service->name ) {
 			array_push($logs,"Nome mudou de \"" . $channel->name . "\" para \"" . $service->name ."\"" );
 			$channel->name = $service->name ;
+		}
+
+		if ( $channel->viewer_channel != $service->viewer_channel ) {
+			// Não registrar pois não é uma informação relevante para o SAC
+			//array_push($logs,"viewer_channel mudou de \"" . $channel->viewer_channel . "\" para \"" . $service->viewer_channel ."\"" );
+			$channel->viewer_channel = $service->viewer_channel ;
+		}
+
+		if ( $channel->service_type_id != $service->service_type_id ) {
+			array_push($logs,"service_type_id mudou de \"" . $channel->service_type_id . "\" para \"" . $service->service_type_id ."\"" );
+			$channel->service_type_id = $service->service_type_id ;
 		}
 
 		if ( $channel->bouquet_name != $service->bouquet_name ) {
