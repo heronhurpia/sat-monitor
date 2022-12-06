@@ -13,6 +13,9 @@
 		<div class="col-4 {{$transponder->has_logs ? 'text-danger' : 'text-black'}}">
 			Polaridade: {{$transponder->polarity}}
 		</div>
+		<div class="col-4 {{$transponder->has_logs ? 'text-danger' : 'text-black'}}">
+			Modulação: {{$transponder->dvb_mode}}
+		</div>
 	</div>
 
 	<!-- Lista de alterações -->
