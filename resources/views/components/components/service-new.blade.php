@@ -1,29 +1,49 @@
 @isset($services)
-	<div class="row z-depth-2">		
-		@foreach($services as $service) 
-			<div class="col-4 service-box {{$service->codec == 'HEVC' ? 'bg-primary bg-opacity-10' : ''}}  {{$service->video_pid == '0' ? 'bg-success bg-opacity-10' : ''}} ">
-				<div class="{{$service->has_logs ? 'text-danger' : 'text-black'}}" 
-					style="font-size:1.2em">
-					<p class="h4">
+	<div class="row">
+	@foreach($services as $service) 
+		<div class="col-4">
+			<div class="card {{ $service->bouquet_name }}" style="width: 100%;">
+				<div class="card-body">
+				  <h5 class="card-title">
 						@if ( $service->count_logs )
 							<span class="badge rounded-pill bg-danger">{{$service->count_logs}}</span>
 						@endif
 						{{$service->name}}
-					</p>
-					<p class="h6">
-						{{$service->service_type}}
-					</p>
-					<p class="{{ $service->bouquet_name }}">{{ ( $service->bouquet_name != "" ) ? $service->bouquet_name : "" }}</p>
+					</h5>
+
+					<ul>
+						@if ( $service->bouquet_name != "" )
+							<li class="{{ $service->bouquet_name }}">
+								Rede: {{ $service->bouquet_name }}
+							</li>
+						@endif
+						<li class="{{$service->codec == 'HEVC' ? 'bg-primary bg-opacity-75' : ''}}">
+							{{$service->service_type}}
+						</li>
+						<li class="{{$service->codec == 'HEVC' ? 'bg-primary bg-opacity-75' : ''}}">
+							Codec: {{ $service->codec }}
+						</li>
+						<li>
+							Vídeo: {{ $service->video_pid }} - PCR: {{ $service->pcr_pid }}
+						</li>
+						<li>
+							service_type_id: {{ $service->service_type_id }}
+						</li>
+						<li>
+							viewer_channel: {{ $service->viewer_channel }}
+						</li>
+					</ul>
+
+		  			<!-- Lista logs -->
+					<x-components.log :logs="$service->alteracoes" />
 				</div>
 
-				<!-- Lista logs -->
-				<x-components.log :logs="$service->alteracoes" />
-
 				<!-- Exibe canais de áudios -->
-				<x-components.audio-new :audios="$service->audios" />
-				
-			</div>
-		@endforeach
+				<x-components.audio-new :audios="$service->audios" :cor="$service->bouquet_name"/>
+	
+			 </div>
+		</div>
+	@endforeach
 	</div>
 @endisset
 
