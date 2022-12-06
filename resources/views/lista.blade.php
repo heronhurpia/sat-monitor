@@ -5,6 +5,7 @@
 <div class="container">
 	<br>
 
+	{{-- Resumo do monitoramento --}}
 	<div class="row">
 	
 		<!-- Resumo do satélite -->
@@ -67,6 +68,12 @@
 					<button class="btn btn-outline-secondary" type="submit">Filtrar</button>
 				</div>
 			</form>
+
+			<br><hr>
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="detailSwitch">
+				<label class="form-check-label" for="detailSwitch">Lista detalhada</label>
+			</div>
 		</div>
 	</div>
 
@@ -143,6 +150,18 @@
 			});
 			$('#'+cl).css({'backgroundColor':cor});
 		});
+
+		// Oculta detalhes
+		$('.detailed-data').hide('slow');
+	});
+
+	$('#detailSwitch').on('change', function(){
+		if ($(this).is(':checked')) {
+			$('.detailed-data').show('slow');
+   	}
+  		else {
+   		$('.detailed-data').hide('slow');
+		}
 	});
 
 </script>

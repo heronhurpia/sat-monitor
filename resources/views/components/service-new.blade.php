@@ -8,15 +8,13 @@
 						@if ( $service->count_logs )
 							<span class="badge rounded-pill bg-danger">{{$service->count_logs}}</span>
 						@endif
+						@if ( $service->bouquet_name != "" )
+							{{ $service->bouquet_name }} /
+						@endif
 						{{$service->name}}
 					</h5>
 
-					<ul>
-						@if ( $service->bouquet_name != "" )
-							<li class="{{ $service->bouquet_name }}">
-								Rede: {{ $service->bouquet_name }}
-							</li>
-						@endif
+					<ul class="detailed-data">
 						<li class="{{$service->codec == 'HEVC' ? 'bg-primary bg-opacity-75' : ''}}">
 							{{$service->service_type}}
 						</li>

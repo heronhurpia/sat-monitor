@@ -1,5 +1,5 @@
 @if ( count($audios) > 0 )
-	<div class="card">
+	<div class="card detailed-data">
 		<div class="card-body {{$cor}}">
 			<h5 class="card-title">Canais de áudio</h5>
 			<ul>    
