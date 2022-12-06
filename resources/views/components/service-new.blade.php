@@ -2,7 +2,7 @@
 	<div class="row">
 	@foreach($services as $service) 
 		<div class="col-4">
-			<div class="card {{ $service->bouquet_name }}" style="width: 100%;">
+			<div class="card {{ $service->bouquet_name }} {{$service->video_pid == '0' ? 'bg-success bg-opacity-10' : ''}}" style="width: 100%;">
 				<div class="card-body">
 				  <h5 class="card-title">
 						@if ( $service->count_logs )
