@@ -25,7 +25,7 @@
 
 				@isset($transponder->services)
 					@foreach($transponder->services as $service) 
-						<x-components.service :service="$service" />
+						<x-service :service="$service" />
 					@endforeach
 				@endisset
 			</div>

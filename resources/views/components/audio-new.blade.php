@@ -11,7 +11,7 @@
 						pid:{{$audio->pid}}, {{$audio->language}} - {{$audio->audio_type}}
 
 						<div style="font-size:0.8em">
-							<x-components.log :logs="$audio->alteracoes"/>
+							<x-log :logs="$audio->alteracoes"/>
 						</div>
 					</li>
 				@endforeach

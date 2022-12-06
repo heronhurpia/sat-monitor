@@ -35,11 +35,11 @@
 					</ul>
 
 		  			<!-- Lista logs -->
-					<x-components.log :logs="$service->alteracoes" />
+					<x-log :logs="$service->alteracoes" />
 				</div>
 
 				<!-- Exibe canais de áudios -->
-				<x-components.audio-new :audios="$service->audios" :cor="$service->bouquet_name"/>
+				<x-audio-new :audios="$service->audios" :cor="$service->bouquet_name"/>
 	
 			 </div>
 		</div>

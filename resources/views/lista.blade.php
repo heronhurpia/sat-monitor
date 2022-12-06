@@ -99,7 +99,7 @@
 	<!-- Lista de transponders -->
 	@isset($transponders)
 		@foreach($transponders as $transponder) 
-			<x-components.transponder-new :transponder="$transponder" />
+			<x-transponder-new :transponder="$transponder" />
 		@endforeach
 	@endisset
 
@@ -107,7 +107,7 @@
 	<h2>Lista de canais detalhada</h2>
 	@isset($transponders)
 		@foreach($transponders as $transponder) 
-			<x-components.transponder :transponder="$transponder" />
+			<x-transponder :transponder="$transponder" />
 			@endforeach
 	@endisset 
 

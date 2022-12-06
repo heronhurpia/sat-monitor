@@ -19,10 +19,10 @@
 	</div>
 
 	<!-- Lista de alterações -->
-	<x-components.log :logs="$transponder->alteracoes"/>
+	<x-log :logs="$transponder->alteracoes"/>
 
 	<!-- Lista de serviços  -->
 	<br>
-	<x-components.service-new :services="$transponder->services" />
+	<x-service-new :services="$transponder->services" />
 
 </div>

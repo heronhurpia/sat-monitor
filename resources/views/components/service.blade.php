@@ -26,7 +26,7 @@
 
 				@isset($service->audios)
 					@foreach($service->audios as $audio)
-						<x-components.audio :audio="$audio" />
+						<x-audio :audio="$audio" />
 					@endforeach
 				@endisset
 			</div>
