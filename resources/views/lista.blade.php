@@ -100,23 +100,18 @@
 
 			<div id="log_list" class="collapse">
 				<div class="card-body">
-					<ul>
-						@foreach($logs as $log)
-							<li>
-								<div class="row">
-									<div class="col-2">
-										{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}
-									</div>
-									<div class="col-3">
-										{{$log->name}}
-									</div>
-									<div class="col-7">
-										{{$log->description}}
-									</div>
-								</div>
-							</li>
-						@endforeach
-					</ul>
+
+					<table class="table table-striped table-hover">
+						<tbody>
+							@foreach($logs as $log)
+								<tr>
+									<td>{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}</td>
+									<td>{{$log->name}}</td>
+									<td>{{$log->description}}</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -141,9 +136,9 @@
 </div> 
 
 <?php
-	echo '<pre>'; 
-	print_r($logs); 
-	echo '</pre>' ;	
+	//echo '<pre>'; 
+	//print_r($logs); 
+	//echo '</pre>' ;	
 ?>
 @endsection
 
@@ -178,9 +173,9 @@
 	$('#detailSwitch').on('change', function(){
 		if ($(this).is(':checked')) {
 			$('.detailed-data').show('slow');
-   	}
+		}
   		else {
-   		$('.detailed-data').hide('slow');
+			$('.detailed-data').hide('slow');
 		}
 	});
 

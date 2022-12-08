@@ -50,8 +50,11 @@
 								@can('manage_users')
 									{{ csrf_field() }}
 									<input type="hidden" class="tarefa_id" name="tarefa_id" value="{{$t->id}}">
-									<button name="finish" class="btn btn-outline-success" type="submit">Finalizar</button>
-									<button name="reinsert" class="btn btn-outline-danger" type="submit">Reinserir</button>
+									@if ( $t->finished == 0 )
+										<button name="finish" class="btn btn-outline-success" type="submit">Finalizar</button>
+									@else
+										<button name="reinsert" class="btn btn-outline-danger" type="submit">Reinserir</button>
+									@endif
 									<button name="delete" class="btn btn-outline-danger" type="submit">Apagar</button>
 								@endcan
 
