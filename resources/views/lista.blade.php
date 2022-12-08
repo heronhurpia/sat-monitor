@@ -38,7 +38,13 @@
 					</li>
 				@endisset
 				@isset($logs[0])
-					<li class="bg-danger bg-opacity-10">Última alteração: {{\Carbon\Carbon::parse($logs[0]->created_at)->format('d/m/Y h:i')}}</li>
+					<li class="bg-danger bg-opacity-10">
+						Última alteração: 
+						dia 
+						{{\Carbon\Carbon::parse($logs[0]->created_at)->format('d/m/Y')}}
+						às 
+						{{\Carbon\Carbon::parse($logs[0]->created_at)->format('h:i')}}
+					</li>
 				@endisset
 			</ul>
 		</div>
