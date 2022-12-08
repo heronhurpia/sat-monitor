@@ -94,9 +94,23 @@
 
 			<div id="log_list" class="collapse">
 				<div class="card-body">
-					@foreach($logs as $log)
-						<p>{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}} - {{ $log->description}}</p> 
-					@endforeach
+					<ul>
+						@foreach($logs as $log)
+							<li>
+								<div class="row">
+									<div class="col-2">
+										{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}
+									</div>
+									<div class="col-3">
+										{{$log->name}}
+									</div>
+									<div class="col-7">
+										{{$log->description}}
+									</div>
+								</div>
+							</li>
+						@endforeach
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -121,9 +135,9 @@
 </div> 
 
 <?php
-//	echo '<pre>'; 
-//	print_r($networks); 
-//	echo '</pre>' ;	
+	echo '<pre>'; 
+	print_r($logs); 
+	echo '</pre>' ;	
 ?>
 @endsection
 

@@ -53,7 +53,7 @@ class AdminController extends Controller
 			$alteracoes = LOG::select('description','created_at')
 				->where('table','=','transponders')
 				->where('item_id','=',$x->id)
-					->whereDate('created_at',[now()->subMinutes(3000), now()])
+				->whereDate('created_at',[now()->subMinutes(3000), now()])
 				->get();
 			$x->alteracoes = $alteracoes ;
 

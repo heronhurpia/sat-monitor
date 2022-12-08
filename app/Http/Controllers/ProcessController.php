@@ -37,15 +37,27 @@ class ProcessController extends Controller
 		$tv = Service::where('video_pid','>','0')->count();
 		$hevc = Service::where('codec','=','HEVC')->count();
 		$radio = Service::where('video_pid','=','0')->count();
-		$logs = Log::orderBy('created_at','desc')
-		->limit(100)
-		->get();
+
+		$inicio = now()->subDays(3);
+		$logs = Log::where('created_at','>',$inicio)
+			->where('table','!=','process')
+			->orderBy('created_at','desc')
+			->get();
+
+		foreach ( $logs as &$log ) {
+			if ( $log->table == 'services') {
+				$service_name = Service::where('services.id',$log->item_id)->first();
+				$log->name = $service_name->name ;
+			}
+			else if ( $log->table == 'audios') {
+				$service_name = Audio::where('audio.id',$log->item_id)->join('services as s','audio.service_id','s.id')->first();
+				$log->name = $service_name->name ;
+			}
+		}
 	
 		$query = "select datetime, lineup from dvb.lineup l order by id_lineup desc limit 1" ;
 		$s = DB::select(DB::raw($query));
 		$transponders = json_decode($s[0]->lineup) ;
-
-//		$collection = Service::distinct->count('bouquet_id');
 
 		return view('process', compact('tv','radio','hevc','logs','transponders'));
 	}

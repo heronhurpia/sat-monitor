@@ -35,9 +35,25 @@
 			</div>
  
 			<div class="card-body">
-				@foreach($logs as $log)
-					<p>{{ $log->id }}. {{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}} - {{ $log->description}}</p> 
-				@endforeach
+				<div class="card-body">
+					<ul>
+						@foreach($logs as $log)
+							<li>
+								<div class="row">
+									<div class="col-2">
+										{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}
+									</div>
+									<div class="col-2">
+										{{$log->name}}
+									</div>
+									<div class="col-8">
+										{{$log->description}}
+									</div>
+								</div>
+							</li>
+						@endforeach
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

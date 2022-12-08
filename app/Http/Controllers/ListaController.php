@@ -32,7 +32,7 @@ class ListaController extends Controller
 			$inicio = $data ;	
 		}
 		else {
-			$inicio = now()->subDays(3);
+			$inicio = now()->subDays(7);
 		}
 
 
@@ -136,8 +136,16 @@ class ListaController extends Controller
 			->orderBy('created_at','desc')
 			->get();
 
-		// $query = "select datetime, lineup from dvb.lineup l order by id_lineup desc limit 1" ;
-		// $list = DB::select(DB::raw($query));
+		foreach ( $logs as &$log ) {
+			if ( $log->table == 'services') {
+				$service_name = Service::where('services.id',$log->item_id)->first();
+				$log->name = $service_name ? $service_name->name : "" ;
+			}
+			else if ( $log->table == 'audios') {
+				$service_name = Audio::where('audio.id',$log->item_id)->join('services as s','audio.service_id','s.id')->first();
+				$log->name = $service_name ? $service_name->name : "" ;
+			}
+		}
 	
 		// Totalizações para relatórios
 		$tv = Service::where('video_pid','!=','0')->count();
