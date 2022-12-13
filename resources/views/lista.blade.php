@@ -13,12 +13,12 @@
 			<h3>Resumo:</h3>
 			<ul>
 				@isset($tv)
-					<li>Canais de TV ( H264 e H265/HEVC): {{$tv}}</li>
+					<li>Canais de TV ( H264 + H265/HEVC ): {{$tv}}</li>
 				@endisset
 				@isset($tv)
 					<li>
 						<span class="bg-primary bg-opacity-10">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-						Canais de TV H265: {{$hevc}}
+						Canais de TV H265/HEVC: {{$hevc}}
 					</li>
 				@endisset
 				@isset($radio)
@@ -34,7 +34,7 @@
 				@endisset
 				@isset($b6)
 					<li>
-						Canais do B6 ( HEVC ): {{$b6}}
+						Canais do B6 ( H265/HEVC ): {{$b6}}
 					</li>
 				@endisset
 				@isset($logs[0])
