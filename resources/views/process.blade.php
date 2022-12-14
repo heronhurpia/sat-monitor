@@ -6,7 +6,7 @@
 
 	<br>
 	<div class="row">
-		<div class="col-5">
+		<div class="col-12">
 			<h3>Resumo:</h3> 
 			<ul>
 				@isset($tv)
@@ -61,7 +61,6 @@
 </div>
 
 <?php
-
 //echo '<pre>'; 
 //print_r($collection); 
 //echo '</pre>' ;	

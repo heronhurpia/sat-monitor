@@ -38,9 +38,9 @@ class ProcessController extends Controller
 		$hevc = Service::where('codec','=','HEVC')->count();
 		$radio = Service::where('video_pid','=','0')->count();
 
-		$inicio = now()->subDays(3);
+		$inicio = now()->subDays(7);
 		$logs = Log::where('created_at','>',$inicio)
-			->where('table','!=','process')
+			//->where('table','!=','process')
 			->orderBy('created_at','desc')
 			->get();
 
@@ -69,6 +69,9 @@ class ProcessController extends Controller
 	 */
 	public function process()
 	{
+		// Apaga todos os logs
+		Log::truncate();
+
 		$query = "select datetime, lineup from dvb.lineup l order by id_lineup desc limit 1" ;
 		$s = DB::select(DB::raw($query));
 
@@ -78,6 +81,54 @@ class ProcessController extends Controller
 				$this->updateTransponder($transponder);
 			}
 		}
+
+		/* Processo para apagar canais */
+		/* Cria uma lista baseado na varredura atual */
+		$logs = array() ;
+		$canais = array() ;
+		foreach(json_decode($s[0]->lineup) as $transponders){
+			foreach($transponders as $transponder){
+				foreach($transponder->services as $service){
+					if ( $service->name ) {
+						array_push($canais,$service);
+					}
+				}
+			}
+		}
+		
+		// Acrescenta um canal arfificialmente por motivos de teste
+		unset($canais[33]); 
+		array_push($logs,'Total de canais desta varredura: ' . count($canais));
+		array_push($logs,'Total de canais do banco de dados: ' . Service::count());
+
+		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
+		$services = Service::all();
+		foreach($services as $index => $service){
+			foreach($canais as $ndx => $canal){
+				if ( $service->name == $canal->name ) {
+					unset($services[$index]);
+					unset($canais[$ndx]);
+					break;
+				}
+			}
+		}
+		array_push($logs,'Total de canais desta varredura: ' . count($canais));
+		array_push($logs,'Total de canais do banco de dados: ' . count($services));
+		foreach($services as $service){
+//			Service::whereId($service->id)->delete();
+			array_push($logs,'Apagar canal "' . $service->id . '.' . $service->name . '"');
+		}
+		array_push($logs,'Total de canais do banco de dados ao fim do processo: ' . Service::count());
+		/* Criar logs para as alterações */
+		foreach ( $logs as $log ) {
+			$l = new LOG ;
+			$l->table = 'process';
+			$l->description = $log ;
+			$l->item_id = 1 ;
+			$l->created_at = Carbon::now() ;
+			$l->updated_at = Carbon::now() ;
+			$l->save();
+		}		
 	}
 	
 	/**
