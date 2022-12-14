@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-	<br>
+	<br> 
 
 	{{-- Resumo do monitoramento --}}
 	<div class="row">
@@ -17,13 +17,13 @@
 				@endisset
 				@isset($tv)
 					<li>
-						<span class="bg-primary bg-opacity-10">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+						<x-hevc-box/>
 						Canais de TV H265/HEVC: {{$hevc}}
 					</li>
 				@endisset
 				@isset($radio)
 					<li>
-						<span class="bg-success bg-opacity-10">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+						<x-radio-box/>
 						Canais de rádio: {{$radio}}
 					</li>
 				@endisset

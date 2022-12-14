@@ -7,7 +7,7 @@
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>{{ config('app.name', 'Monitoramento') }}</title>
+	<title>{{ config('app.name', 'Sat Monitor') }}</title>
 
 	<!-- Fonts -->
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
