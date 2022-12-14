@@ -66,7 +66,7 @@ class ListaController extends Controller
 			}
 
 			/** Carrega serviços associados a este transponder */
-			$services = Service::where('transponder_id','=',$transponder->id)->get();
+			$services = Service::where('active','1')->where('transponder_id','=',$transponder->id)->get();
 			$transponder->services = $services ;
 
 			/* Busca os serviços de cada um dos transponders */
@@ -138,6 +138,7 @@ class ListaController extends Controller
 
 		foreach ( $logs as &$log ) {
 			if ( $log->table == 'services') {
+				// Não deve ter o filtro active uma vez que o log pode englobar serviços inativos
 				$service_name = Service::where('services.id',$log->item_id)->first();
 				$log->name = $service_name ? $service_name->name : "" ;
 			}
@@ -148,15 +149,16 @@ class ListaController extends Controller
 		}
 	
 		// Totalizações para relatórios
-		$tv = Service::where('video_pid','!=','0')->count();
-		$hevc = Service::where('codec','=','HEVC')->count();
-		$radio = Service::where('video_pid','=','0')->count();
+		$tv = Service::where('active','1')->where('video_pid','!=','0')->count();
+		$hevc = Service::where('active','1')->where('codec','=','HEVC')->count();
+		$radio = Service::where('active','1')->where('video_pid','=','0')->count();
 		$b5 = $tv - $hevc ;
 		$b6 = $tv ;
 
-		$networks = Service::select('bouquet_name')->where("bouquet_name","!=","")->distinct(['bouquet_name'])->get();
+		$networks = Service::select('bouquet_name')->where('active','1')->where("bouquet_name","!=","")->distinct(['bouquet_name'])->get();
 		foreach ( $networks as &$n ) {
-			$n->total = Service::where("bouquet_name",$n->bouquet_name)
+			$n->total = Service::where('active','1')
+										->where("bouquet_name",$n->bouquet_name)
 										->where('video_pid','!=','0')
 										->where('codec','!=','HEVC')
 										->count();
@@ -164,6 +166,7 @@ class ListaController extends Controller
 		}
 		foreach ( $networks as &$n ) {
 			$n->total = Service::where("bouquet_name",$n->bouquet_name)
+										->where('active','1')
 										->where('video_pid','!=','0')
 										->count();
 			$b6 = $b6 - $n->total + 1 ;

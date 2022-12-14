@@ -46,7 +46,6 @@ class ProcessController extends Controller
 
 		foreach ( $logs as &$log ) {
 			if ( $log->table == 'services') {
-
 				// Não deve ter o filtro active uma vez que o log pode englobar serviços inativos
 				$service_name = Service::where('services.id',$log->item_id)->first();
 				$log->name = $service_name->name ;
@@ -112,8 +111,6 @@ class ProcessController extends Controller
 				}
 			}
 		}
-		array_push($logs,'Total de canais desta varredura: ' . count($canais));
-		array_push($logs,'Total de canais do banco de dados: ' . count($services));
 		foreach($services as $service){
 			$service->active = 0 ; 
 			$service->save();
