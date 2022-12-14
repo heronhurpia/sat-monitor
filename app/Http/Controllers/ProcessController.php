@@ -34,9 +34,9 @@ class ProcessController extends Controller
 		$log->save();
 
 		// Totalizações para relatórios
-		$tv = Service::where('video_pid','>','0')->count();
-		$hevc = Service::where('codec','=','HEVC')->count();
-		$radio = Service::where('video_pid','=','0')->count();
+		$tv = Service::where('video_pid','>','0')->where('active','1')->count();
+		$hevc = Service::where('codec','=','HEVC')->where('active','1')->count();
+		$radio = Service::where('video_pid','=','0')->where('active','1')->count();
 
 		$inicio = now()->subDays(7);
 		$logs = Log::where('created_at','>',$inicio)
@@ -46,6 +46,8 @@ class ProcessController extends Controller
 
 		foreach ( $logs as &$log ) {
 			if ( $log->table == 'services') {
+
+				// Não deve ter o filtro active uma vez que o log pode englobar serviços inativos
 				$service_name = Service::where('services.id',$log->item_id)->first();
 				$log->name = $service_name->name ;
 			}
@@ -70,7 +72,7 @@ class ProcessController extends Controller
 	public function process()
 	{
 		// Apaga todos os logs
-		Log::truncate();
+		//Log::truncate();
 
 		$query = "select datetime, lineup from dvb.lineup l order by id_lineup desc limit 1" ;
 		$s = DB::select(DB::raw($query));
@@ -97,12 +99,10 @@ class ProcessController extends Controller
 		}
 		
 		// Acrescenta um canal arfificialmente por motivos de teste
-		unset($canais[33]); 
-		array_push($logs,'Total de canais desta varredura: ' . count($canais));
-		array_push($logs,'Total de canais do banco de dados: ' . Service::count());
+		//unset($canais[12]); 
 
 		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
-		$services = Service::all();
+		$services = Service::where('active','1')->get();
 		foreach($services as $index => $service){
 			foreach($canais as $ndx => $canal){
 				if ( $service->name == $canal->name ) {
@@ -115,10 +115,11 @@ class ProcessController extends Controller
 		array_push($logs,'Total de canais desta varredura: ' . count($canais));
 		array_push($logs,'Total de canais do banco de dados: ' . count($services));
 		foreach($services as $service){
-//			Service::whereId($service->id)->delete();
+			$service->active = 0 ; 
+			$service->save();
 			array_push($logs,'Apagar canal "' . $service->id . '.' . $service->name . '"');
 		}
-		array_push($logs,'Total de canais do banco de dados ao fim do processo: ' . Service::count());
+
 		/* Criar logs para as alterações */
 		foreach ( $logs as $log ) {
 			$l = new LOG ;
@@ -228,7 +229,12 @@ class ProcessController extends Controller
 	public function updateService($id,$service){
 
 		$logs = array() ;
-		$channel = Service::where('transponder_id','=',$id)->where('svcid','=',$service->service_id)->first();
+		$channel = Service::
+						where('transponder_id','=',$id)
+						->where('svcid','=',$service->service_id)
+						->where('active','1')
+						->first();
+
 		if ( !$channel ) {
 			$channel = new Service ;
 			$channel->name = $service->name ;
