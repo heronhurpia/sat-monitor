@@ -114,7 +114,7 @@ class ProcessController extends Controller
 		foreach($services as $service){
 			$service->active = 0 ; 
 			$service->save();
-			array_push($logs,'Apagar canal "' . $service->id . '.' . $service->name . '"');
+			array_push($logs,'Canal "' . $service->name . '" apagado' );
 		}
 
 		/* Criar logs para as alterações */
