@@ -84,7 +84,7 @@ class ProcessController extends Controller
 		}
 
 		/* Processo para apagar canais */
-		/* Cria uma lista baseado na varredura atual */
+		/* Cria uma lista de serviços baseada na varredura atual */
 		$logs = array() ;
 		$canais = array() ;
 		foreach(json_decode($s[0]->lineup) as $transponders){
@@ -120,7 +120,7 @@ class ProcessController extends Controller
 		/* Criar logs para as alterações */
 		foreach ( $logs as $log ) {
 			$l = new LOG ;
-			$l->table = 'process';
+			$l->table = 'services';
 			$l->description = $log ;
 			$l->item_id = 1 ;
 			$l->created_at = Carbon::now() ;

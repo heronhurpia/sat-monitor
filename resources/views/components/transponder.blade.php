@@ -9,6 +9,10 @@
 					aria-expanded="false" 
 					aria-controls="{{'id_' . $transponder->frequency}}"
 					style:{font-}></style>
+
+				@if ( $transponder->count_logs )
+					<span class="badge rounded-pill bg-danger">{{$transponder->count_logs}}</span>
+				@endif
 				Frequencia = {{$transponder->frequency}}MHz - S/R = {{$transponder->symbol_rate}}KBPs, {{$transponder->polarity}}
 			</h5>
 		</div>

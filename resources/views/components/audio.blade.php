@@ -3,6 +3,12 @@
 	<div class="card">
 		<div class="card-header">
 			<div class="row">
+				@if ( $audio->count_logs )
+					<div class="col">
+						<span class="badge rounded-pill bg-danger">{{$audio->count_logs}}</span>
+					</div>
+				@endif
+
 				<div class="col">ID: {{$audio->id}}</div>
 				<div class="col">PID: {{$audio->pid}}</div>
 				<div class="col">Idioma: "{{$audio->language}}"</div>
