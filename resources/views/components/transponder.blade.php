@@ -22,7 +22,7 @@
 				@isset($transponder->alteracoes)
 					<ul>
 					@foreach($transponder->alteracoes as $log)
-						<li>{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}} - {{ $log->description}}, alterado à {{ $log->last }} minutos</li> 
+						<li>{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}} - {{ $log->description}}, alterado à {{ $log->last }} horas</li> 
 					@endforeach
 					</ul>
 				@endisset

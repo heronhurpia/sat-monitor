@@ -114,19 +114,15 @@ class ProcessController extends Controller
 		foreach($services as $service){
 			$service->active = 0 ; 
 			$service->save();
-			array_push($logs,'Canal "' . $service->name . '" apagado' );
-		}
 
-		/* Criar logs para as alterações */
-		foreach ( $logs as $log ) {
 			$l = new LOG ;
 			$l->table = 'services';
-			$l->description = $log ;
-			$l->item_id = 1 ;
+			$l->description = 'Canal "' . $service->name . '" apagado' ;
+			$l->item_id =  $service->id ;
 			$l->created_at = Carbon::now() ;
 			$l->updated_at = Carbon::now() ;
 			$l->save();
-		}		
+		}
 	}
 	
 	/**

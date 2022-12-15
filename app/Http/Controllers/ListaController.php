@@ -61,7 +61,7 @@ class ListaController extends Controller
 				/* Calcula quando foi feita a última alteração */
 				foreach ( $alteracoes as &$alteracao ) {
 					$from = \Carbon\Carbon::parse($alteracao->created_at);
-					$alteracao->last = $to->diffInMinutes($from) ;
+					$alteracao->last = $to->diffInHours($from) ;
 				}
 			}
 
@@ -88,7 +88,7 @@ class ListaController extends Controller
 					/* Calcula quando foi feita a última alteração */
 					foreach ( $alteracoes as &$alteracao ) {
 						$from = \Carbon\Carbon::parse($alteracao->created_at);
-						$alteracao->last = $to->diffInMinutes($from) ;
+						$alteracao->last = $to->diffInHours($from) ;
 					}
 
 					/** Indica que serviço teve alteração */
@@ -116,7 +116,7 @@ class ListaController extends Controller
 						/* Calcula quando foi feita a última alteração */
 						foreach ( $alteracoes as &$alteracao ) {
 							$from = \Carbon\Carbon::parse($alteracao->created_at);
-							$alteracao->last = $to->diffInMinutes($from) ;
+							$alteracao->last = $to->diffInHours($from) ;
 						}
 						$audio->alteracoes = $alteracoes ;
 
