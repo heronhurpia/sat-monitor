@@ -40,7 +40,7 @@ class ProcessController extends Controller
 
 		$inicio = now()->subDays(7);
 		$logs = Log::where('created_at','>',$inicio)
-			//->where('table','!=','process')
+			->where('table','!=','process')
 			->orderBy('created_at','desc')
 			->get();
 
@@ -60,7 +60,9 @@ class ProcessController extends Controller
 		$s = DB::select(DB::raw($query));
 		$transponders = json_decode($s[0]->lineup) ;
 
-		return view('process', compact('tv','radio','hevc','logs','transponders'));
+		$locks = DB::select(DB::raw('select * from dvb.frequency_lock_success_rate'));
+
+		return view('process', compact('tv','radio','hevc','logs','transponders','locks'));
 	}
 
 	/**
