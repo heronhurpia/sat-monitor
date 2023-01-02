@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLogRequest;
 use App\Http\Requests\UpdateLogRequest;
 use App\Models\Log;
+use App\Models\Transponder;
+use App\Models\Service;
+
+use DB;
+use Carbon\Carbon; 
+use Session; 
 
 class LogController extends Controller
 {
@@ -15,7 +21,22 @@ class LogController extends Controller
 	 */
 	public function index()
 	{
-		return view('logs');
+
+		/* Constante com limite da última alteração em dias */
+		//$limit = 100 ;
+		$data = Session::get('data');
+		if ( isset ( $data ) ) {
+			$inicio = $data ;	
+		}
+		else {
+			$inicio = now()->subDays(7);
+		}
+
+		$logs = Log::where('created_at','>',$inicio)
+			->orderBy('created_at','desc')
+			->get();		
+
+		return view('logs',compact('logs'));
 	}
 
 	/**
