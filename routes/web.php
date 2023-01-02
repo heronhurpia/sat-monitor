@@ -10,6 +10,7 @@ use App\Http\Controllers\QualityController;
 use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\ProcessnologController;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,18 +29,11 @@ if(!empty($scheme)) {
 	URL::forceScheme($scheme);
 }
 
-// Página de execução do pull
-Route::get('/pull', 
-	function () {
-		return view('pull');
-	}
-);
+// Página controllers, só com view
+Route::get('/pull',function () {	return view('pull');});
+Route::get('/',function () {return view('home');});
 
-Route::get('/', 
-	function () {
-		return view('home');
-	}
-);
+Route::get('/logs', [LogController::class, 'index'])->name('logs');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
