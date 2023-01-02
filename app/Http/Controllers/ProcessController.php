@@ -85,44 +85,44 @@ class ProcessController extends Controller
 
 		/* Processo para apagar canais */
 		/* Cria uma lista de serviços baseada na varredura atual */
-		$logs = array() ;
-		$canais = array() ;
-		foreach(json_decode($s[0]->lineup) as $transponders){
-			foreach($transponders as $transponder){
-				foreach($transponder->services as $service){
-					if ( $service->name ) {
-						array_push($canais,$service);
-					}
-				}
-			}
-		}
+		//$logs = array() ;
+		//$canais = array() ;
+		//foreach(json_decode($s[0]->lineup) as $transponders){
+		//	foreach($transponders as $transponder){
+		//		foreach($transponder->services as $service){
+		//			if ( $service->name ) {
+		//				array_push($canais,$service);
+		//			}
+		//		}
+		//	}
+		//}
 		
 		// Acrescenta um canal arfificialmente por motivos de teste
 		//unset($canais[12]); 
 
 		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
-		$services = Service::where('active','1')->get();
-		foreach($services as $index => $service){
-			foreach($canais as $ndx => $canal){
-				if ( $service->name == $canal->name ) {
-					unset($services[$index]);
-					unset($canais[$ndx]);
-					break;
-				}
-			}
-		}
-		foreach($services as $service){
-			$service->active = 0 ; 
-			$service->save();
+		// $services = Service::where('active','1')->get();
+		// foreach($services as $index => $service){
+		// 	foreach($canais as $ndx => $canal){
+		// 		if ( $service->name == $canal->name ) {
+		// 			unset($services[$index]);
+		// 			unset($canais[$ndx]);
+		// 			break;
+		// 		}
+		// 	}
+		// }
+		// foreach($services as $service){
+		// 	$service->active = 0 ; 
+		// 	$service->save();
 
-			$l = new LOG ;
-			$l->table = 'services';
-			$l->description = 'Canal "' . $service->name . '" apagado' ;
-			$l->item_id =  $service->id ;
-			$l->created_at = Carbon::now() ;
-			$l->updated_at = Carbon::now() ;
-			$l->save();
-		}
+		// 	$l = new LOG ;
+		// 	$l->table = 'services';
+		// 	$l->description = 'Canal "' . $service->name . '" apagado' ;
+		// 	$l->item_id =  $service->id ;
+		// 	$l->created_at = Carbon::now() ;
+		// 	$l->updated_at = Carbon::now() ;
+		// 	$l->save();
+		// }
 	}
 	
 	/**
