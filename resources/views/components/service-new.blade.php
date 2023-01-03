@@ -25,6 +25,9 @@
 
 					<ul class="detailed-data">
 						<li>
+							Service ID: {{$service->svcid}}
+						</li>
+						<li>
 							{{$service->service_type}}
 						</li>
 						<li>
