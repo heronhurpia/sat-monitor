@@ -38,7 +38,8 @@ class ProcessController extends Controller
 		$hevc = Service::where('codec','=','HEVC')->where('active','1')->count();
 		$radio = Service::where('video_pid','=','0')->where('active','1')->count();
 
-		$inicio = now()->subDays(7);
+		//$inicio = now()->subDays(1);
+		$inicio = now()->subMinutes(60);
 		$logs = Log::where('created_at','>',$inicio)
 			->where('table','!=','process')
 			->orderBy('created_at','desc')
@@ -105,8 +106,8 @@ class ProcessController extends Controller
 			}
 		}
 		
-		// Acrescenta um canal arfificialmente por motivos de teste
-		//unset($canais[12]); 
+		// Retira um canal arfificialmente por motivos de teste
+		//unset($canais[31]); 
 
 		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
 		$services = Service::where('active','1')->get();
@@ -119,17 +120,49 @@ class ProcessController extends Controller
 				}
 			}
 		}
-		foreach($services as $service){
-//			$service->active = 0 ; 
-//			$service->save();
 
-			$l = new LOG ;
-			$l->table = 'transponders';
-			$l->description = 'Canal "' . $service->name . '" apagado' ;
-			$l->item_id = $service->id ;
-			$l->created_at = Carbon::now() ;
-			$l->updated_at = Carbon::now() ;
-			$l->save();
+		$list = array();
+		$locks = DB::select(DB::raw('select * from dvb.frequency_lock_success_rate'));
+		foreach ( $locks as $lock ) {
+			$xponder = Transponder::where('frequency','=',$lock->frequency)->first();
+			if ( $xponder && $lock->Last == 0 ) {
+				array_push($list,$xponder->id) ;  
+				$l = new LOG ;
+				$l->table = 'transponders';
+				$l->description = 'Transponder "' . $lock->frequency . '" fora do ar:' . $lock->Last ;
+				$l->item_id = $service->id ;
+				$l->created_at = Carbon::now() ;
+				$l->updated_at = Carbon::now() ;
+				$l->save();
+			}
+		}
+
+		// Apaga os serviços que estavam no dB mas não estão na varredura atual
+		foreach($services as $service){
+
+			if ( array_search($service->transponder_id,$list) ) {
+				$l = new LOG ;
+				$l->table = 'transponders';
+				$l->description = 'Efetivamente apagar "' . $service->name ;
+				$l->item_id = $service->id ;
+				$l->created_at = Carbon::now() ;
+				$l->updated_at = Carbon::now() ;
+				$l->save();
+
+				// Apaga o serviço
+				//$service->active = 0 ; 
+				//$service->save();
+			}
+			else {
+				$l = new LOG ;
+				$l->table = 'transponders';
+				$l->description = 'Não apagar "' . $service->name ;
+				$l->item_id = $service->id ;
+				$l->created_at = Carbon::now() ;
+				$l->updated_at = Carbon::now() ;
+				$l->save();
+			}
+
 		}
 	}
 	

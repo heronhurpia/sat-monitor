@@ -75,7 +75,7 @@
 		</div>
 	@endisset
 </div>
-
+ 
 <?php
 	//echo '<pre>'; 
 	//print_r($locks); 
