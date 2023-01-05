@@ -91,6 +91,35 @@ class ProcessController extends Controller
 	}
 
 	// Analisa dados para pagar canais escluídos
+	public function deleteChannels_temp($lineup)
+	{
+		Log::where('created_at','<',now()->subMinutes(60))->delete();
+
+		/* Processo para apagar canais */
+		/* Cria uma lista de serviços baseada na varredura atual */
+		$canais = collect() ;
+		foreach($lineup as $transponders){
+			foreach($transponders as $transponder){
+				foreach($transponder->services as $service){
+					if ( $service->name ) {
+						$canais->push([$service->name,$service->transponder_id]);
+					}
+				}
+			}
+		}
+
+		// Retira um canal arfificialmente por motivos de teste
+		unset($canais[34]); 
+
+		// Carrega serviços do dB
+		$services = Service::select('name','transponder_id')->where('active','1')->get();
+	
+		// 
+		$diff = $services->diff($canais);
+		
+	}
+	
+	// Analisa dados para pagar canais escluídos
 	public function deleteChannels($lineup)
 	{
 		/* Processo para apagar canais */
@@ -107,7 +136,7 @@ class ProcessController extends Controller
 		}
 		
 		// Retira um canal arfificialmente por motivos de teste
-		//unset($canais[31]); 
+		// unset($canais[45]); 
 
 		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
 		$services = Service::where('active','1')->get();
@@ -162,7 +191,6 @@ class ProcessController extends Controller
 				$l->updated_at = Carbon::now() ;
 				$l->save();
 			}
-
 		}
 	}
 	
