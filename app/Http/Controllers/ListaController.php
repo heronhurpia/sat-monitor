@@ -132,6 +132,7 @@ class ListaController extends Controller
 		}
 
 		$logs = Log::where('created_at','>',$inicio)
+			->where('table','!=','transponders')
 			->where('table','!=','process')
 			->orderBy('created_at','desc')
 			->get();
