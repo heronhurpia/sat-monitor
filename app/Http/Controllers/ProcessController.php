@@ -93,7 +93,7 @@ class ProcessController extends Controller
 	// Analisa dados para pagar canais escluídos
 	public function deleteChannels_temp($lineup)
 	{
-		Log::where('created_at','<',now()->subMinutes(60))->delete();
+		//Log::where('created_at','<',now()->subMinutes(60))->delete();
 
 		/* Processo para apagar canais */
 		/* Cria uma lista de serviços baseada na varredura atual */
@@ -158,7 +158,7 @@ class ProcessController extends Controller
 				array_push($list,$xponder->id) ;  
 				$l = new LOG ;
 				$l->table = 'transponders';
-				$l->description = 'Transponder "' . $lock->frequency . '" fora do ar:' . $lock->Last ;
+				$l->description = 'Transponder "' . $lock->frequency . '" fora do ar: ' . $lock->Last ;
 				$l->item_id = $service->id ;
 				$l->created_at = Carbon::now() ;
 				$l->updated_at = Carbon::now() ;
