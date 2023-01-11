@@ -32,6 +32,7 @@ class ProcessnologController extends Controller
 		$xpdrs = $this->createCollection();
 
 		/* Atualiza tabelas e registra alterações */
+		$this->create_log('process','1',"Varredura do sinal");
 		$this->process($xpdrs); 
 
 		$logs = Log::orderBy('created_at','desc')->limit(50)->get();

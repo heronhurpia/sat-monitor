@@ -1,62 +1,39 @@
 @extends('layouts.app')
 
 @section('content')
-
+@section('content')
 <div class="container">
-
-	<br>
-	<div class="row">
-		<div class="col-6">
-			@isset($transponders)
-				<ul>
-					@foreach ( $transponders as $t )
-						<li>
-							<div class="row">
-								<div class="col-3">
-									{{\Carbon\Carbon::parse($t->created_at)->format('h:i')}}
-								</div>
-								<div class="col-3">
-									{{$t->tsid}}
-								</div>
-								<div class="col-6">
-									{{$t->frequency}}/{{$t->symbol_rate}}/{{$t->polarity}}
-								</div>
-							</div>
-						</li>
-					@endforeach
-				</ul>
-			@endisset
-			@isset($services)
-				<ul>
-					@foreach ( $services as $s )
-						<li>
-							<div class="row">
-								<div class="col-6">
-									{{$s->name}}
-								</div>
-								<div class="col-6">
-									{{$s->bouquet_name}}
-								</div>
-							</div>
-						</li>
-					@endforeach
-				</ul>
-			@endisset
+	@isset($logs)
+		<div class="section">
+			<div class="card">
+				<div class="card-header">
+					Histórico de alterações
+				</div>
+	
+				<div class="card-body">
+					<div class="card-body">
+						<ul class="list-group">
+							@foreach($logs as $log)
+								<li class="list-group-item {{$log->table}}">
+									<div class="row">
+										<div class="col-2">
+											{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}
+										</div>
+										<div class="col-2">
+											{{$log->table}}
+										</div>
+										<div class="col-8">
+											{{$log->description}}
+										</div>
+									</div>
+								</li>
+							@endforeach
+						</ul>
+					</div>
+				</div>
+			</div>
 		</div>
-
-		<div class="col-6">
-			@isset($logs)
-				<ul>
-					@foreach($logs as $log)
-						<li>{{\Carbon\Carbon::parse($log->created_at)->format('h:i')}}
-							-  {{ $log->table}}
-							-  {{ $log->description}}
-						</li> 
-					@endforeach
-				</ul>
-			@endisset
-		</div>
-	</div>
+	@endisset
 </div>
 
 <?php
@@ -69,4 +46,14 @@
 //echo '</pre>' ;	
 ?>
 
+@endsection
+
+@section('script-commands')
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		window.setTimeout(function() {
+	   	window.location.href = 'http://192.168.1.31:8000/processnolog';
+		}, 15*60*1000);
+	});
+</script>
 @endsection
