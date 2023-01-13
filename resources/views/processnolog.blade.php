@@ -1,7 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-@section('content')
+
+<div class="toast-container position-fixed end-0 p-3">
+	<div class="toast ml-auto" role="alert" data-delay="700" data-autohide="false">
+		<div class="toast-header">
+			<strong class="mr-auto text-primary">Aviso!!!</strong>
+		 </div>
+		 <div class="toast-body">
+			<p>Nova varredurua executada</p>
+			<p>Verifique o resultado dos logs</p>
+		</div>
+	</div>
+</div>
+
 <div class="container">
 	@isset($logs)
 		<div class="section">
@@ -16,13 +28,13 @@
 							@foreach($logs as $log)
 								<li class="list-group-item {{$log->table}}">
 									<div class="row">
-										<div class="col-2">
-											{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y h:i')}}
+										<div class="col-3">
+											{{\Carbon\Carbon::parse($log->created_at)->format('d/m/Y H:i')}}
 										</div>
 										<div class="col-2">
 											{{$log->table}}
 										</div>
-										<div class="col-8">
+										<div class="col-7">
 											{{$log->description}}
 										</div>
 									</div>
@@ -53,7 +65,10 @@
 	$(document).ready(function(){
 		window.setTimeout(function() {
 	   	window.location.href = 'http://192.168.1.31:8000/processnolog';
-		}, 15*60*1000);
+		}, 13*60*1000);
+
+		$('.toast').toast('show');
 	});
+	
 </script>
 @endsection

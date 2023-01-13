@@ -28,14 +28,14 @@ class ProcessnologController extends Controller
 		//Service::truncate();
 		//Transponder::truncate();
 
-		/* Carrega os transponders locados e com nomes padronizados */
-		$xpdrs = $this->createCollection();
-
+		/* Carrega os transponders locados */
+		$this->createCollections();
+	
 		/* Atualiza tabelas e registra alterações */
 		$this->create_log('process','1',"Varredura do sinal");
-		$this->process($xpdrs); 
+		//$this->process($xpdrs); 
 
-		$logs = Log::orderBy('created_at','desc')->limit(50)->get();
+		$logs = Log::orderBy('created_at','desc')->limit(150)->get();
 		$transponders = Transponder::all();
 
 		/*
@@ -48,8 +48,7 @@ class ProcessnologController extends Controller
 		echo '</pre>' ;	
 		*/
 
-		return view('processnolog', compact('logs','transponders','xpdrs'));
-
+		return view('processnolog', compact('logs'));
 	}
 
 	public function process($transponders)
@@ -74,7 +73,55 @@ class ProcessnologController extends Controller
 		}
 
 		// Apaga canais/transponders 
-		//$this->deleteChannels(json_decode($s[0]->lineup));
+		$this->deleteChannels($transponders);
+	}
+
+	// Analisa dados para pagar canais escluídos
+	public function deleteChannels($transponders,$locks)
+	{
+		/* Processo para apagar canais */
+		/* Cria uma lista de serviços baseada na varredura atual */
+		$canais = array() ;
+		foreach($transponders as $transponder){
+			foreach($transponder->services as $service){
+				if ( $service->name ) {
+					array_push($canais,$service);
+				}
+			}
+		}
+		
+		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
+		// Varre cada um dos serviços e verifica se existe correspondente na transmissão
+		$services = Service::select('services.*','tp.frequency as frequency')
+			->join('transponders as tp','services.transponder_id','tp.id')
+			->where('active','1')
+			->get();
+
+		/* Apaga canais */
+		foreach($services as $index => $service){
+
+			/* Não analisar serviços de transponders não locados */
+			foreach ( $locks as $x => $lock ) {
+				if ( $lock->Last == 0 && $lock->frequency == $service->frequency ) {
+					$this->create_log('process','1',"Transponder não locado, ignorar serviço: " . $service->name);
+					unset($services[$x]);
+					break;
+				}
+			}
+
+			foreach($canais as $ndx => $canal){
+				if ( $service->name == $canal->name ) {
+					unset($services[$index]);
+					unset($canais[$ndx]);
+					break;
+				}
+			}
+		}
+
+		// Apaga os serviços que estavam no dB mas não estão na varredura atual
+		foreach($services as $service){
+			$this->create_log('services',$service->id,"Apagar serviço: " . $service->name);
+		}
 	}
 
 	/* Verifica se o transponder locado está no dB.
@@ -279,8 +326,41 @@ class ProcessnologController extends Controller
 		
 	/* Lê dB e converte resultado para array. 
 		Somente transponders locados serão analisados
-		Renomeia campos para ficarem iguais aos definidos no dB  
 	*/
+	public function createCollections () {
+
+		/* Transforma o lineup recebido em collection */
+		$query = "select datetime, lineup as col_lineup from dvb.lineup l order by id_lineup desc limit 1" ;
+		$s = DB::select(DB::raw($query));
+		$transponders = json_decode($s[0]->col_lineup)->line_up;
+
+		// Carrega resultado de sintonia
+		$locks = DB::select(DB::raw('select * from dvb.frequency_lock_success_rate'));
+
+		// varre cada transponder e retira da lista os não sintonizados
+		foreach($transponders as $index => &$transponder) {
+			foreach($locks as $ndx => $lock){
+				// Apaga transponder não sintonizado	
+				if ( $lock->Last == 0 && $lock->frequency == $transponder['frequency'] ) {
+					echo '<p>Apagando transponder: ' . $lock->Last . '/' . $index . '</p>' ;	
+					$this->create_log('process','1','Transponder ' . $transponder['frequency'] . ' não sintonizado!');
+					unset($transponder[$index]);
+					break;
+				}
+			}
+		}
+
+		/*
+		**		Apaga serviços não encontrados.
+		**	Somente transponders sintonizados na última varredura serão analisados
+		*/
+		$this->deleteChannels($transponders,$locks);
+
+		return $transponders ;
+
+
+	}
+
 	public function createCollection () {
 
 		/* Transforma o lineup recebido em collection */
@@ -297,14 +377,14 @@ class ProcessnologController extends Controller
 		/* Renomeia campos para ficarem iguais ao dB */
 		$xponders = array_map(function($tag) {
 			return array(
-				'frequency' => $tag['frequency'],
-				'symbol_rate' => $tag['symbol_rate'],
-				'polarity' => $tag['polarity'],
-				'tsid' => $tag['transport_stream_id'],
-				'dvb_mode' => $tag['dvb_mode'],
-				'network_id' => $tag['network_id'],
-				'onid' => $tag['original_network_id'],
-				'services' => $tag['services'],
+				'frequency'		=> $tag['frequency'],
+				'symbol_rate'	=> $tag['symbol_rate'],
+				'polarity'		=> $tag['polarity'],
+				'tsid'			=> $tag['transport_stream_id'],
+				'dvb_mode'		=> $tag['dvb_mode'],
+				'network_id'	=> $tag['network_id'],
+				'onid'			=> $tag['original_network_id'],
+				'services'		=> $tag['services'],
 			);
 	  	}, $xponders);
 
@@ -315,7 +395,7 @@ class ProcessnologController extends Controller
 		//$locks[8]->Last = 0 ;
 
 		// varre cada transponder e retira da lista os não sintonizados
-		foreach($xponders as $index => &$xponder){
+		foreach($xponders as $index => &$xponder) {
 			foreach($locks as $ndx => $lock){
 				// Apaga transponder não sintonizado	
 				if ( $lock->Last == 0 && $lock->frequency == $xponder['frequency'] ) {
