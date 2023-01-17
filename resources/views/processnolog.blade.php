@@ -15,6 +15,128 @@
 </div>
 
 <div class="container">
+	@isset($locks)
+		<div class="section">
+			<div class="card">
+				<div class="card-header">
+					Última sintonia
+				</div>
+	
+				<div class="card-body">
+					<div class="card-body">
+						<ul class="list-group">
+							<li class="list-group-item">
+								<div class="row h5">
+									<div class="col-3">
+										Frequencia
+									</div>
+									<div class="col-2">
+										Ok
+									</div>
+									<div class="col-2">
+										Failed
+									</div>
+									<div class="col-2">
+										Last
+									</div>
+								</div>
+							</li>
+
+							@foreach($locks as $index=>$l)
+							<li class="list-group-item">
+								<div class="row">
+									<div class="col-3">
+										{{$index}}). {{$l->frequency}}
+									</div>
+									<div class="col-2">
+										{{$l->OK}}
+									</div>
+									<div class="col-2">
+										{{$l->Failed}}
+									</div>
+									<div class="col-2">
+										{{$l->Last}}
+									</div>
+								</div>
+							</li>
+						@endforeach
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endisset
+</div>
+
+<div class="container">
+	@isset($xpondersss)
+		<div class="section">
+			<div class="card">
+				<div class="card-header">
+					Lista salva no dB
+				</div>
+	
+				<div class="card-body">
+					<div class="card-body">
+						<ul class="list-group">
+							@foreach($xponders as $index => $x)
+								<li class="list-group-item">
+									<div class="row">
+										<div class="col-3">
+											{{$index}}). {{$x->frequency}}
+										</div>
+										<div class="col-3">
+											{{$x->symbol_rate}}
+										</div>
+										<div class="col-3">
+											{{$x->polarity}}
+										</div>
+									</div>
+								</li>
+							@endforeach
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endisset
+</div>
+
+<div class="container">
+	@isset($transponderssss)
+		<div class="section">
+			<div class="card">
+				<div class="card-header">
+					Lista resultante da última varredura 
+				</div>
+	
+				<div class="card-body">
+					<div class="card-body">
+						<ul class="list-group">
+							@foreach($transponders as $index =>$t)
+								<li class="list-group-item">
+									<div class="row">
+										<div class="col-3">
+											{{$index}}). {{$t->frequency}}
+										</div>
+										<div class="col-3">
+											{{$t->symbol_rate}}
+										</div>
+										<div class="col-3">
+											{{$t->polarity}}
+										</div>
+									</div>
+								</li>
+							@endforeach
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endisset
+</div>
+
+<div class="container">
 	@isset($logs)
 		<div class="section">
 			<div class="card">
@@ -50,12 +172,8 @@
 
 <?php
 	//echo '<pre>'; 
-	//print_r($xpdrs); 
+	//print_r($logs); 
 	//echo '</pre>' ;	
-
-//echo '<pre>'; 
-//print_r($logs); 
-//echo '</pre>' ;	
 ?>
 
 @endsection

@@ -202,7 +202,6 @@ class ProcessController extends Controller
 	{
 		/* Busca transponder atual */
 		$x = Transponder::where('frequency','=',$transponder->frequency)
-									->where('symbol_rate','=',$transponder->symbol_rate)
 									->where('polarity','=',$transponder->polarity)
 									->first();
 
@@ -251,6 +250,11 @@ class ProcessController extends Controller
 	public function logTransponder($new,$old) {
 		$logs = array() ;
 	
+		if ( $old->symbol_rate != $new->symbol_rate ) {
+			array_push($logs,"Symbol rate  mudou de " . $old->symbol_rate . " para " . $new->symbol_rate);
+			$old->symbol_rate = $new->symbol_rate ;
+		}		
+
 		if ( $old->tsid != $new->transport_stream_id ) {
 			array_push($logs,"TSID mudou de " . $old->tsid . " para " . $new->transport_stream_id);
 			$old->tsid = $new->transport_stream_id ;
